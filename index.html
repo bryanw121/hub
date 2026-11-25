@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F6F6F3">
+<meta name="robots" content="noindex">
+<title>Bryan's tools</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; background: #F6F6F3; color: #18181B; font: 16px/1.4 Inter, system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased; padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom); }
+a { color: inherit; text-decoration: none; }
+.wrap { max-width: 960px; margin: 0 auto; padding: 20px 16px 48px; }
+header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.brand { display: flex; align-items: center; gap: 10px; }
+.mark { width: 36px; height: 36px; border-radius: 10px; background: #18181B; color: #fff; display: grid; place-items: center;
+  font: 700 15px "Space Grotesk", sans-serif; }
+h1 { margin: 0; font: 700 22px "Space Grotesk", sans-serif; }
+.iconbtn { width: 44px; height: 44px; border-radius: 12px; border: 1px solid #E4E4E7; background: #fff; display: grid;
+  place-items: center; cursor: pointer; }
+.iconbtn:hover { border-color: #A1A1AA; }
+.search { margin-bottom: 12px; }
+.search input { width: 100%; height: 48px; padding: 0 14px; font: inherit; font-size: 16px; border: 1px solid #1F4FC9;
+  border-radius: 12px; background: #fff; color: #18181B; }
+.label { font-size: 13px; font-weight: 600; color: #52525B; margin: 4px 0 8px; }
+.last { display: flex; align-items: center; gap: 14px; padding: 16px; background: #18181B; color: #fff; border-radius: 18px;
+  margin-bottom: 16px; }
+.last .sub { color: #D4D4D8; }
+.list { background: #fff; border: 1px solid #E4E4E7; border-radius: 18px; overflow: hidden; }
+.row { display: flex; align-items: center; gap: 14px; min-height: 72px; padding: 12px 16px; border-top: 1px solid #F0F0F2; }
+.row:first-child { border-top: 0; }
+.row:active, .row:hover { background: #F4F6FF; }
+.ico { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; flex-shrink: 0; }
+.last .ico { width: 52px; height: 52px; border-radius: 14px; }
+.txt { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
+.name { font-weight: 600; }
+.last .name { font: 700 18px "Space Grotesk", sans-serif; }
+.sub { font-size: 14px; color: #52525B; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.badge { font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 999px; background: #FEF3C7; color: #92400E; }
+.lock { font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 999px; background: #F4F4F5; color: #3F3F46; }
+.empty { padding: 24px 16px; text-align: center; color: #52525B; }
+.sk { height: 72px; border-top: 1px solid #F0F0F2; background: linear-gradient(90deg, #fff 0, #F4F4F5 50%, #fff 100%);
+  background-size: 200% 100%; animation: sh 1.2s infinite; }
+@keyframes sh { to { background-position: -200% 0; } }
+@media (min-width: 720px) {
+  .wrap { padding-top: 40px; }
+  .list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; background: none; border: 0; }
+  .row { border: 1px solid #E4E4E7; border-radius: 16px; background: #fff; }
+  .row:first-child { border-top: 1px solid #E4E4E7; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand"><div class="mark" aria-hidden="true">BW</div><h1>My tools</h1></div>
+    <button class="iconbtn" id="searchbtn" aria-label="Search tools" aria-expanded="false">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#18181B" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+    </button>
+  </header>
+  <div class="search" id="searchbox" hidden>
+    <label for="q" style="position:absolute;left:-9999px">Search tools</label>
+    <input id="q" type="search" placeholder="Search tools" autocomplete="off">
+  </div>
+  <div id="lastwrap" hidden>
+    <div class="label">Last opened</div>
+    <a class="last" id="last"></a>
+  </div>
+  <div class="label">All tools</div>
+  <div class="list" id="list"><div class="sk"></div><div class="sk"></div><div class="sk"></div></div>
+</div>
+<script>
+(() => {
+  const ICONS = {
+    calendar: '<path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/>',
+    people: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/>',
+    pin: '<path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12zM12 12a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>',
+    briefcase: '<path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>',
+    code: '<path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/>',
+    box: '<path d="M21 8l-9-5-9 5 9 5 9-5zM3 8v8l9 5 9-5V8"/>',
+  };
+  // localStorage can be missing or throw (private mode); treat it as empty.
+  const store = {
+    get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch {} },
+  };
+  // Opening the hub once with ?me marks this device as Bryan's, which shows
+  // the private tools. It only hides cards: those tools guard themselves.
+  const params = new URLSearchParams(location.search);
+  if (params.has("me")) { store.set("hub-me", "1"); history.replaceState(null, "", location.pathname); }
+  const me = store.get("hub-me") === "1";
+
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const icon = (t, size) => `<span class="ico" style="background:${esc(t.tint)}"><svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${esc(t.ink)}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[t.icon] || ICONS.box}</svg></span>`;
+  const row = (t) => `<a class="row" href="${esc(t.url)}" data-id="${esc(t.id)}">${icon(t, 22)}<span class="txt"><span class="name">${esc(t.name)}</span><span class="sub">${esc(t.blurb)}</span></span>${t.status ? `<span class="badge">${esc(t.status)}</span>` : ""}${t.private ? '<span class="lock">Only you</span>' : ""}</a>`;
+
+  let tools = [];
+  const list = document.getElementById("list");
+  const q = document.getElementById("q");
+
+  function render() {
+    const text = q.value.trim().toLowerCase();
+    const shown = tools.filter((t) => !text || (t.name + " " + t.blurb).toLowerCase().includes(text));
+    list.innerHTML = shown.length ? shown.map(row).join("") : '<div class="empty">No tools match</div>';
+    const last = tools.find((t) => t.id === store.get("hub-last"));
+    const lw = document.getElementById("lastwrap");
+    lw.hidden = !last || !!text;
+    if (last) {
+      const a = document.getElementById("last");
+      a.href = last.url; a.dataset.id = last.id;
+      a.innerHTML = `${icon(last, 26)}<span class="txt"><span class="name">${esc(last.name)}</span><span class="sub">${esc(last.blurb)}</span></span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>`;
+    }
+  }
+
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest("a[data-id]");
+    if (a) store.set("hub-last", a.dataset.id);
+  });
+  document.getElementById("searchbtn").addEventListener("click", (e) => {
+    const box = document.getElementById("searchbox");
+    box.hidden = !box.hidden;
+    e.currentTarget.setAttribute("aria-expanded", String(!box.hidden));
+    if (box.hidden) { q.value = ""; render(); } else q.focus();
+  });
+  q.addEventListener("input", render);
+
+  fetch("/tools.json").then((r) => r.json()).then((all) => {
+    tools = all.filter((t) => me || !t.private);
+    render();
+  }).catch(() => { list.innerHTML = '<div class="empty">Could not load tools. Pull to refresh.</div>'; });
+})();
+</script>
+</body>
+</html>

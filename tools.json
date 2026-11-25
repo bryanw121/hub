@@ -1,0 +1,50 @@
+[
+  {
+    "id": "skelly",
+    "name": "Skelly",
+    "blurb": "Austin volleyball schedules",
+    "url": "https://schelagg.vercel.app",
+    "icon": "calendar",
+    "tint": "#E0E9FF",
+    "ink": "#1F4FC9"
+  },
+  {
+    "id": "vteam",
+    "name": "vteam",
+    "blurb": "Book volleyball sessions",
+    "url": "https://vteamvolleyball.com",
+    "icon": "people",
+    "tint": "#FFE8D9",
+    "ink": "#C2410C"
+  },
+  {
+    "id": "curb",
+    "name": "Curb",
+    "blurb": "Open street parking near you",
+    "url": "https://curb-atx.vercel.app",
+    "icon": "pin",
+    "tint": "#DDF4EC",
+    "ink": "#047857",
+    "status": "Beta"
+  },
+  {
+    "id": "jobhunt",
+    "name": "Job hunt",
+    "blurb": "Roles and applications",
+    "url": "https://jobhunt-bryanwu.vercel.app",
+    "icon": "briefcase",
+    "tint": "#EDE4FF",
+    "ink": "#6D28D9",
+    "private": true
+  },
+  {
+    "id": "neetcode",
+    "name": "NeetCode tracker",
+    "blurb": "Daily problems and stats",
+    "url": "https://claude.ai/artifact/QWvQbjJGgv66GMytHAddZo",
+    "icon": "code",
+    "tint": "#FEF3C7",
+    "ink": "#B45309",
+    "private": true
+  }
+]
