@@ -11,7 +11,7 @@ Add an entry to `tools.json` and push. Vercel redeploys.
   "icon": "box", "tint": "#E0E9FF", "ink": "#1F4FC9", "status": "Beta", "private": false }
 ```
 
-- `icon`: calendar, people, pin, briefcase, code, box. To add more, add them to `ICONS` in `index.html`.
+- `icon`: calendar, people, pin, briefcase, code, camera, box. To add more, add them to `ICONS` in `index.html`.
 - `status`: optional badge, such as "Beta".
 - `private: true`: the card shows only on your own devices. Open the hub once with `?me` on each device. This only hides the card; the tool itself has to guard its own access (job hunt does).
 

@@ -28,6 +28,15 @@
     "status": "Beta"
   },
   {
+    "id": "photo-composer",
+    "name": "Photo Composer",
+    "blurb": "Poses and Austin photo spots",
+    "url": "https://photo-composer.pages.dev",
+    "icon": "camera",
+    "tint": "#FCE7F3",
+    "ink": "#BE185D"
+  },
+  {
     "id": "jobhunt",
     "name": "Job hunt",
     "blurb": "Roles and applications",
