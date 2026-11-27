@@ -15,4 +15,6 @@ Add an entry to `tools.json` and push. Vercel redeploys.
 - `status`: optional badge, such as "Beta".
 - `private: true`: the card shows only on your own devices. Open the hub once with `?me` on each device. This only hides the card; the tool itself has to guard its own access (job hunt does).
 
+- `keyed: "jh"`: the card opens `<url>/k/<key>`, with the key saved on this device by opening the hub once with `?jh=<key>`. The key never goes in this repo.
+
 Each tool keeps its own repo, its own tech stack and its own hosting. The hub only links to it.

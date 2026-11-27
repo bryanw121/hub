@@ -94,13 +94,23 @@ h1 { margin: 0; font: 700 22px "Space Grotesk", sans-serif; }
   // Opening the hub once with ?me marks this device as Bryan's, which shows
   // the private tools. It only hides cards: those tools guard themselves.
   const params = new URLSearchParams(location.search);
-  if (params.has("me")) { store.set("hub-me", "1"); history.replaceState(null, "", location.pathname); }
+  // ?jh=<key> also saves a tool's private access key on this device only, so
+  // its card opens <url>/k/<key> and lets this browser in every time.
+  if (params.has("me") || params.has("jh")) {
+    store.set("hub-me", "1");
+    if (params.get("jh")) store.set("hub-key-jh", params.get("jh"));
+    history.replaceState(null, "", location.pathname);
+  }
   const me = store.get("hub-me") === "1";
 
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const icon = (t, size) => `<span class="ico" style="background:${esc(t.tint)}"><svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${esc(t.ink)}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[t.icon] || ICONS.box}</svg></span>`;
-  const row = (t) => `<a class="row" href="${esc(t.url)}" data-id="${esc(t.id)}">${icon(t, 22)}<span class="txt"><span class="name">${esc(t.name)}</span><span class="sub">${esc(t.blurb)}</span></span>${t.status ? `<span class="badge">${esc(t.status)}</span>` : ""}${t.private ? '<span class="lock">Only you</span>' : ""}</a>`;
+  const row = (t) => `<a class="row" href="${esc(href(t))}" data-id="${esc(t.id)}">${icon(t, 22)}<span class="txt"><span class="name">${esc(t.name)}</span><span class="sub">${esc(t.blurb)}</span></span>${t.status ? `<span class="badge">${esc(t.status)}</span>` : ""}${t.private ? '<span class="lock">Only you</span>' : ""}</a>`;
 
+  const href = (t) => {
+    const k = t.keyed && store.get("hub-key-" + t.keyed);
+    return k ? t.url.replace(/\/$/, "") + "/k/" + encodeURIComponent(k) : t.url;
+  };
   let tools = [];
   const list = document.getElementById("list");
   const q = document.getElementById("q");
@@ -114,7 +124,7 @@ h1 { margin: 0; font: 700 22px "Space Grotesk", sans-serif; }
     lw.hidden = !last || !!text;
     if (last) {
       const a = document.getElementById("last");
-      a.href = last.url; a.dataset.id = last.id;
+      a.href = href(last); a.dataset.id = last.id;
       a.innerHTML = `${icon(last, 26)}<span class="txt"><span class="name">${esc(last.name)}</span><span class="sub">${esc(last.blurb)}</span></span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>`;
     }
   }

@@ -44,7 +44,8 @@
     "icon": "briefcase",
     "tint": "#EDE4FF",
     "ink": "#6D28D9",
-    "private": true
+    "private": true,
+    "keyed": "jh"
   },
   {
     "id": "neetcode",
