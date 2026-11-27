@@ -1,20 +1,52 @@
-# hub
+# Bryan's tools
 
-One page that links to all of Bryan's tools. Static, no build step, hosted on Vercel.
+One repo for the hub page and for new personal projects. Every folder below is
+**its own app**: you can deploy it alone, or copy it into a new repo and deploy
+it there, and nothing else here notices.
 
-## Add a tool
-
-Add an entry to `tools.json` and push. Vercel redeploys.
-
-```json
-{ "id": "newtool", "name": "New tool", "blurb": "What it does", "url": "https://newtool.vercel.app",
-  "icon": "box", "tint": "#E0E9FF", "ink": "#1F4FC9", "status": "Beta", "private": false }
+```
+hub/                 the hub page (bryanwu-tools.vercel.app)
+projects/<name>/     one folder per project, any tech stack
+templates/<kind>/    starting points that `new-project` copies
+scripts/             repo tooling only; no project imports from here
 ```
 
-- `icon`: calendar, people, pin, briefcase, code, camera, box. To add more, add them to `ICONS` in `index.html`.
-- `status`: optional badge, such as "Beta".
-- `private: true`: the card shows only on your own devices. Open the hub once with `?me` on each device. This only hides the card; the tool itself has to guard its own access (job hunt does).
+## Make a new project
 
-- `keyed: "jh"`: the card opens `<url>/k/<key>`, with the key saved on this device by opening the hub once with `?jh=<key>`. The key never goes in this repo.
+```
+node scripts/new-project.mjs my-idea
+```
 
-Each tool keeps its own repo, its own tech stack and its own hosting. The hub only links to it.
+That copies `templates/static` to `projects/my-idea/` and fills in its name.
+Use `--template <kind>` for another template. Then build inside that folder
+like any standalone app.
+
+To put it on the hub, add a card to `hub/tools.json` once it has a URL
+(`--hub-url https://…` does this for you).
+
+## Deploy a project
+
+Vercel → New Project → import this repo → **Root Directory:
+`projects/my-idea`** → Deploy. Its `vercel.json` skips rebuilds unless
+something inside its own folder changed, so pushing to one project never
+redeploys another.
+
+## Move a project to its own repo
+
+Copy `projects/my-idea/` into the new repo's root and deploy it there. Nothing
+to untangle: it has its own `package.json`, lockfile, config and `.env`.
+Then delete the folder here, and update its card in `hub/tools.json`.
+
+## The rules that keep folders independent
+
+1. **No reaching outside your folder.** No imports, asset paths or scripts that
+   go `../` above the project's own root. Copy what you need instead.
+2. **Own dependencies.** Each folder has its own `package.json` and lockfile.
+   No workspace or root-level `package.json`.
+3. **Own config and secrets.** `vercel.json`, `.env.example` and the like live
+   in the folder. Real secrets go in that project's Vercel settings, never in
+   the repo.
+4. **Own README.** What it is, how to run it, how to deploy it.
+
+`node scripts/check-independence.mjs` checks rules 1, 2 and 4, and runs on
+every pull request.
